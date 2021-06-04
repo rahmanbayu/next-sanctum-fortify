@@ -1,0 +1,21 @@
+1.  kita bisa gunakan middleware di laylout miosal middleware="verified" / middleware=['ferivied', 'auth']
+2.  namu ika hanya beberapa page saja kita bisa langsung cek saa di page yang perlu ini misal di update profile kita bisa lakukan
+
+        const authUser = useRecoilValueLoadable(authUserState);
+        const route = useRouter();
+        useEffect(() => {
+            if (authUser.contents && !authUser.contents.is_verified) {
+                route.push("/settings/verify-email");
+            }
+        }, [authUser.contents]);
+3.  dan kita bisa buat pemberitahuan bahwa user belum verify email misal diatas navbar, untuk lebih jelas buka Layout.php
+    {authUser.contents && !authUser.contents.has_verified && authUser.state === "hasValue" && (
+        <div className="bg-red-500 py-1 text-white px-10 text-sm flex items-center justify-between">
+            <span>Please verify your email!</span>
+            <button onClick={resendEmailVerification} className=" underline focus:outline-none">
+                {loading ? "Loading . . ." : "Resend Email"}
+            </button>
+        </div>
+    )}
+4.  tidak lupa kita juga harus bisa membuat user mengirim email verification lagi kita tinggal request ke 
+    email/verification-notification di BE

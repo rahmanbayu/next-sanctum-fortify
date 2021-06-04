@@ -1,0 +1,25 @@
+1.  kita buat wraper untuk semua page misal namanya Layout.js
+2.  Layout ini memerlukan prioperti middleware="" bisa di isi dengan auth, guest, dll
+3.  di dalam layout kita perlu melakukan pengecekan didalam useEffect agar di eksekusi hanya sekali saat document ready
+      useEffect(() => {
+          if (middleware === "guest" && authUser.state === "hasValue" && authUser.contents) {
+              router.replace("/dashboard");
+          }
+          if (middleware === "auth" && authUser.contents == null) {
+              router.replace("/login");
+          }
+      }, [authUser.contents]);
+
+      - apa itu authUser.state baca di recoil step, jadi ini bakal return 'loading','hasContent' dan 'hasError' antara ketiga ini
+        jadi kita bisa buat kondisi dari ini
+    -   apa itu authUser.contents ini ya berisi data user kita bisa authUser.contents.email untuk akses user email
+4.  jadi di tiap page kita bisa lakukan
+        <Layout middleware="auth">
+            Dashboard
+        </Layout>
+        <Layout middleware="guest">
+            Login
+        </Layout>
+        <Layout middleware="guest">
+            Register
+        </Layout>

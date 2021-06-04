@@ -1,0 +1,24 @@
+1.  boat folder di root dengan nama hooks
+2.  buat file misal sayya mau buat hook utuk send email verification 
+3.  buat file dengan nama useVerifyEmail.js WAJIB awal nama file menggunakan 'use'
+4.  di dalam useVerifyEmail.js
+    import React from "react";
+    function useVerifyEmail(props) {
+        const [loading, setloading] = useState(false)
+        const resendEmailVerification = async () => {
+            setLoading(true)
+            try {
+                  await axios.post("/email/verification-notification");
+                  console.log("resend email success");
+              } catch (error) {
+                  console.log("resend email failed");
+              }
+            setLoading(false)
+          };
+          return {
+              resendEmailVerification, loading
+          };
+        }
+        export default useVerifyEmail;
+5.  cara memanggilnya
+    const { resendEmailVerification, loading } = useVerificationEmail();

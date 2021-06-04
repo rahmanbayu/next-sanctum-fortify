@@ -1,0 +1,49 @@
+1.  kan kita biasanya lakukan /api/me lalu store 0responsenya ke recoil
+2.  kita bisa ubah ini jadi kita hanya melakukan sekali aja
+3.  ilustrasi
+    ---recoil---
+    authCheckState  -> default: false
+    authUserState  -> default: [ authenticated user ]
+
+    kan kita biasanya 
+    auth -> default: {check: false, user: []}
+
+4.  tapi yang authUserState ini bukan atom() melainkan selector()
+    import axios from "axios";
+    import { atom, selector } from "recoil";
+
+    export const authCheckState = atom({
+        key: "authCheckState",
+        default: false,
+    });
+
+    export const authUserState = selector({  // ini akan diexsekusi sekali saat page pertama load dan akan dieksekusi lagi saat authCheckState berubah valuenya anggap aja seperti useEffect()
+        key: "authUserState",
+        get: async ({ get }) => {
+            get(authCheckState);
+            try {
+                let response = await axios.get("/api/me");
+                return response.data.data;                 //jangan lupa return
+            } catch (error) {}
+        },
+    });
+5.  cara mengakses data di authUserState kita menggunakan useRecoilValueLoadable
+    const authUser  =useRecoilValueLoadable(authUserState);
+    cara akses valuenya authUser.contents.name / email /image dll
+
+    jika kita console.log(authUser) disana ada properti state yang ada tiga kemungkinan 'loading', 'hasValue', 'hasError'
+    nah kita bisa make state ini untuk buat loading misalkan
+    function UserInfo({userID}) {
+      const userNameLoadable = useRecoilValueLoadable(userNameQuery(userID));
+      switch (userNameLoadable.state) {
+        case 'hasValue':
+          return <div>{userNameLoadable.contents}</div>;
+        case 'loading':
+          return <div>Loading...</div>;
+        case 'hasError':
+          throw userNameLoadable.contents;
+      }
+    }
+
+    ini bisa dilihat di dokumentasi : https://recoiljs.org/docs/api-reference/core/useRecoilValueLoadable/
+    /////////////////// INI SANGAT POWERFULL /////////////////////

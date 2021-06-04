@@ -1,0 +1,22 @@
+1.  hampir sama persis dengan react,
+2.  buat page login dan lakukan request ke /sanctum/csrf dan /login beserta credentials nya
+3.  kita buat recoil value yaitu authCheckState sebagai atom dan authUserState sebagai selector
+    apa itu selector anggap aja seperti useEffect() / authUserState akan di eksekusi lagi ketika authCheckState berubah
+    jadi di dalam authUserState ini ada request ke /api/me
+4. login dan set authCheckState dan isi dengan credentials (email, password), dan kita bisa redirect ke maka gitu
+5.  buat register page lakukan sama persis seperti login tapi request ke /register
+    karena fortify auto login setelah register maka kita bisa set authCheckState isi dengan credential (name, email, password, password_confirmation) dan redirect ke dashboard misal
+6.  kita bisa tampilkan siapa yang login di navbar dengan cara 
+    cont autUser = useRecoilValueLoadable(authUserState); //karena authUserState ini mereturn promis kita bisa make loadable
+    cara akses valuenya :
+    {authUser.contents.name}
+8.  buat logout button dan method untuk request ke /logout lalu set authCheckState menjadi false dan redirect.back() atau ke home
+9.  membuat middleware jadi kita bisa taruh middleware di dalam Layout, buka aja Layout.js untuk lebih jelasnya
+10. nah pasti nanti ada permasalahan dimana saat kita sudah login dan kita refresh pagenya lalu logout tapi masih ada name dan navbar belum berganti menadi login dan register
+    ini karena secara default authCheckState=false nah kan kita set valuenya menjadi credential saat login/register nah saat kita 
+    reload page kita sama aja mbalikin valuenya ke false, karna false nilai yang kita definisikan sebagai default nah di koding logout ini kita
+    set authCheckState menjadi false, jadi saat dia di realod nilainya sudah menjadi false dan kita logout ya nilainya tetep false, makannya dia tidak mengupdate authUserState,
+    karena authUserState adalah selector() dari authCheckState jadi authCheckState harus berubah biar authUserState bisa di eksekusi ulang
+    masih menunggun jawaban bang irsyad
+    //salah//kita bisa akali ini dengan kita meredirect ke /login dengan harapan kita akan hit middleware dan auto reload pagenya, tapi ini bukan solusi
+    //salah//atau kita bisa menggunakan useEffect() kosong karena setiap useEffect(()=>{},[value]) value berubah maka page akan di load ulang

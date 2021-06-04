@@ -1,0 +1,12 @@
+1.  buat next.config.js di root folder
+2.  dan masukan kode 
+    module.exports = {
+    async rewrites() {
+        return [
+            {
+                source: "/login",
+                destination: "/auth/login",
+            },
+        ];
+    },
+};

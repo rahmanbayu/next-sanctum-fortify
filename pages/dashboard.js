@@ -2,12 +2,12 @@ import React from "react";
 import Container from "../components/Container";
 import Layout from "../components/Layout";
 
-function index(props) {
+function dashboard(props) {
     return (
-        <Layout>
-            <Container>Home</Container>
+        <Layout middleware="auth" title="Dashboard">
+            <Container>Dashboard</Container>
         </Layout>
     );
 }
 
-export default index;
+export default dashboard;
